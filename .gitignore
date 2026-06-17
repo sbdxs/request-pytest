@@ -1,0 +1,20 @@
+# IDE
+.idea/
+*.iml
+
+# Python cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# Reports
+report/
+testcases/report/
+
+# Temporary files
+*.log
+*.tmp

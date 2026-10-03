@@ -1,15 +1,28 @@
 """
 数据工具类 - 处理测试数据生成和管理
 """
-from faker import Faker
+import base64
 import random
-import string
 import time
+from pathlib import Path
+
+from faker import Faker
+
+
+# 1x1 合法 PNG 图片字节，用于文件上传类用例
+PNG_BYTES = base64.b64decode(
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+)
 
 
 class DataUtil:
     """数据工具类"""
-    
+
+    # 1x1 合法 PNG 图片字节，用于文件上传类用例
+    PNG_BYTES = base64.b64decode(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+    )
+
     def __init__(self):
         self.faker = Faker("zh_CN")
     
@@ -61,6 +74,20 @@ class DataUtil:
             "传播不良信息"
         ]
         return random.choice(reasons)
+
+    def write_image_file(self, directory, filename):
+        """在指定目录写一张测试图片并返回文件路径"""
+        path = Path(directory) / filename
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(PNG_BYTES)
+        return str(path)
+
+    def write_file(self, directory, filename, content=b""):
+        """在指定目录写入任意内容文件并返回文件路径"""
+        path = Path(directory) / filename
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(content)
+        return str(path)
 
 
 # 全局数据工具实例

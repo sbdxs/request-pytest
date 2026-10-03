@@ -20,6 +20,7 @@ class LostFoundAPI(BaseAPI):
         contact_way: int | None = None,
         is_contact_public: int | None = None,
     ) -> dict:
+        """对应 POST /api/lost-found（发布失物招领）"""
         payload = {
             "type": item_type,
             "title": title,
@@ -53,6 +54,7 @@ class LostFoundAPI(BaseAPI):
         sort_by: str | None = None,
         status: int | None = None,
     ) -> dict:
+        """对应 GET /api/lost-found（分页查询失物招领）"""
         params = {"pageNum": page_num, "pageSize": page_size}
         if item_type is not None:
             params["type"] = item_type
@@ -69,15 +71,19 @@ class LostFoundAPI(BaseAPI):
         return self._get("/api/lost-found", params=params)
 
     def get_detail(self, lost_found_id: int) -> dict:
+        """对应 GET /api/lost-found/{lost_found_id}（查询详情）"""
         return self._get(f"/api/lost-found/{lost_found_id}")
 
     def update_status(self, lost_found_id: int, status: int) -> dict:
+        """对应 PATCH /api/lost-found/{lost_found_id}/status（更新状态）"""
         return self._patch(f"/api/lost-found/{lost_found_id}/status", json={"status": status})
 
     def delete(self, lost_found_id: int) -> dict:
+        """对应 DELETE /api/lost-found/{lost_found_id}（删除失物招领）"""
         return self._delete(f"/api/lost-found/{lost_found_id}")
 
     def list_my(self, page_num: int = 1, page_size: int = 10, status: int | None = None) -> dict:
+        """对应 GET /api/lost-found/my（查询我的发布）"""
         params = {"pageNum": page_num, "pageSize": page_size}
         if status is not None:
             params["status"] = status
@@ -98,6 +104,7 @@ class LostFoundAPI(BaseAPI):
         contact_way: int | None = None,
         is_contact_public: int | None = None,
     ) -> dict:
+        """对应 PUT /api/lost-found/{lost_found_id}（更新失物招领）"""
         payload: dict[str, object] = {}
         if item_type is not None:
             payload["type"] = item_type
@@ -124,15 +131,17 @@ class LostFoundAPI(BaseAPI):
         return self._put(f"/api/lost-found/{lost_found_id}", json=payload)
 
     def report(self, lost_found_id: int, reason: str) -> dict:
+        """对应 POST /api/lost-found/report（举报失物招领）"""
         return self._post(
             "/api/lost-found/report",
             json={"lostFoundId": lost_found_id, "reason": reason},
         )
 
     def admin_delete(self, lost_found_id: int, delete_reason: str) -> dict:
+        """对应 DELETE /api/lost-found/admin/{lost_found_id}（管理员删除）"""
         return self._delete(
             f"/api/lost-found/admin/{lost_found_id}",
-            params={"deleteReason": delete_reason},
+            json={"deleteReason": delete_reason},
         )
 
     def admin_list(
@@ -143,6 +152,7 @@ class LostFoundAPI(BaseAPI):
         moderation_status: int | None = None,
         keyword: str | None = None,
     ) -> dict:
+        """对应 GET /api/lost-found/admin/list（分页查询管理列表）"""
         params = {"pageNum": page_num, "pageSize": page_size}
         if status is not None:
             params["status"] = status
@@ -153,9 +163,11 @@ class LostFoundAPI(BaseAPI):
         return self._get("/api/lost-found/admin/list", params=params)
 
     def admin_get_detail(self, lost_found_id: int) -> dict:
+        """对应 GET /api/lost-found/admin/{lost_found_id}（查询管理详情）"""
         return self._get(f"/api/lost-found/admin/{lost_found_id}")
 
     def admin_get_reports(self, lost_found_id: int) -> dict:
+        """对应 GET /api/lost-found/admin/{lost_found_id}/reports（查询举报记录）"""
         return self._get(f"/api/lost-found/admin/{lost_found_id}/reports")
 
     def admin_audit(
@@ -164,6 +176,7 @@ class LostFoundAPI(BaseAPI):
         audit_status: int,
         audit_remark: str | None = None,
     ) -> dict:
+        """对应 PATCH /api/lost-found/admin/{lost_found_id}/audit（审核失物招领）"""
         payload = {"auditStatus": audit_status}
         if audit_remark:
             payload["auditRemark"] = audit_remark
@@ -175,12 +188,14 @@ class LostFoundAPI(BaseAPI):
         moderation_status: int,
         remark: str | None = None,
     ) -> dict:
+        """对应 PATCH /api/lost-found/admin/{lost_found_id}/moderation（更新风控状态）"""
         payload = {"moderationStatus": moderation_status}
         if remark:
             payload["remark"] = remark
         return self._patch(f"/api/lost-found/admin/{lost_found_id}/moderation", json=payload)
 
     def admin_report_list(self, page_num: int = 1, page_size: int = 10, status: int | None = None) -> dict:
+        """对应 GET /api/lost-found/admin/reports（分页查询举报列表）"""
         params = {"pageNum": page_num, "pageSize": page_size}
         if status is not None:
             params["status"] = status
@@ -192,6 +207,7 @@ class LostFoundAPI(BaseAPI):
         status: int,
         handle_remark: str | None = None,
     ) -> dict:
+        """对应 PATCH /api/lost-found/admin/reports/{report_id}（处理举报）"""
         payload = {"status": status}
         if handle_remark:
             payload["handleRemark"] = handle_remark
